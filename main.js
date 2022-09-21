@@ -7,7 +7,7 @@ var gLevel={
 }
 var gGame = {
     isOn:false,
-    showCont:0,
+    showCount:0,
     markedCount:0,
     secsPassed:0
 }
@@ -19,9 +19,8 @@ const EMPTY = ' '
 
 
 var gBoard
-// choose how many mines
-// var gMinescount = 2
 var gClickCount = 0
+var gInterval
 
 function onInitGame() {
     gBoard = buildBoard(gLevel.SIZE)
@@ -37,9 +36,11 @@ function onCellClicked(elCell) {
     var i = +getPosFromClass(elCell).i//get the elcell position
     var j = +getPosFromClass(elCell).j//get the elcell position
 
-    if(gGame.isOn && !gBoard[i][j].isMarked){
-    if (!gClickCount) {
-        createMines(gBoard)
+    if(!gGame.isOn || gBoard[i][j].isMarked) return
+    console.log(gClickCount);
+    
+    if (!gGame.showCount) {
+        createMines(gBoard, i,j)
         setMinesNegsCount()
     }
     // update the is shown propery
@@ -50,15 +51,76 @@ function onCellClicked(elCell) {
     // update the dom:
     elCell.innerText = gBoard[i][j].content
     elCell.classList.add('clicked')
-    checkGameOver()
-    if(gBoard[i][j].content===MINE)gGame.isOn =false
+    checkVictory()
 
+    if(gBoard[i][j].content===MINE){
+        gameOver()
+       
+    }else gGame.showCount++
+    console.log('showCount',gGame.showCount);
+    
     gClickCount++
+    checkVictory()
     // console.log('gClickCount', gClickCount);
 }
+
+function gameOver(){
+    gGame.isOn =false
+    console.log('you lost dude');
+    var elSmily = document.querySelector('.restart-btn')
+    elSmily.innerText='😲'
+    // TODO!! smily
+    // TODO!! show mines
 }
 
+
+function restart(){
+    onInitGame()
+    console.log(gGame);
+    gGame. markedCount=0
+    gGame.secsPassed=0
+    gGame.showCount=0
+    gClickCount=0
+
+    var elSmily = document.querySelector('.restart-btn')
+    elSmily.innerText='🙂'
+}
+
+function onLevelChoose(elLvlBtn){
+    var  level = elLvlBtn.id 
+
+    switch(level){
+        case 'begginer':
+            gLevel.SIZE=4
+            gLevel.MINES=2
+            break;
+        case 'medium':
+            gLevel.SIZE=8
+            gLevel.MINES=14
+            break;
+        case 'expert':
+            gLevel.SIZE=12
+            gLevel.MINES=32
+            break;
+        
+    }
+    restart()
+
+    // if(level==='begginer'){
+
+    //     console.log('begginer');
+    // }else if(level==='medium'){
+    //     console.log('medium');
+    // }else if(level==='expert'){
+    //     console.log('expert');
+        
+    // }
+    
+}
+
+
 function onCellMarked(elCell){
+    if(!gGame.isOn)return
     // console.log(elCell);
     var i = +getPosFromClass(elCell).i
     var j = +getPosFromClass(elCell).j
@@ -70,112 +132,38 @@ function onCellMarked(elCell){
         // update the DOM
         elCell.innerText=FLAG
         gGame.markedCount++
-        console.log('markedCount',gGame.markedCount);
+        
         
     }else{
         // update the model
         gBoard[i][j].isMarked=false
         console.log(gBoard[i][j]);
-        
-    }
-    
-    
-    
-    
+        gGame.markedCount--
+        // update the DOM
+        elCell.innerText=EMPTY
 
+    }
+    console.log('markedCount',gGame.markedCount);
+    checkVictory()
 }
-function checkGameOver(){
-    if(gGame.showCont===gLevel.SIZE**-gLevel.MINES&&gGame.markedCount===gLevel.MINES){
+
+function checkVictory(){
+    if(gGame.showCount===gLevel.SIZE**2-gLevel.MINES&&gGame.markedCount===gLevel.MINES){
         gGame.isOn=false
-
-    }
-}
-
-
-
-function createMines(board) {
-
-    
-    // and mining
-    if (gLevel.MINES > 0) {
-        var emptyPos = []
-        for (var i = 0; i < board.length; i++) {
-            for (var j = 0; j < board[0].length; j++) {
-                emptyPos.push({ i, j })
-            }
-        }
-        for (var h = 0; h < gLevel.MINES; h++) {
-            var randPos = getRandomInt(0, emptyPos.length)
-            var minePos = emptyPos.splice(randPos, 1)
-            // UPDATE THE MODEL
-            board[minePos[0].i][minePos[0].j].content = MINE
-            console.log(minePos[0])//[minePos[0].j]);
-            // UPDATE THE DOM
-            // renderCell(minePos[0], MINE)
-        }
-    }
-    console.table(board);
-    
-    
-    
-}
-
-
-function setMinesNegsCount() {
-    
-    
-    for (var i = 0; i < gBoard.length; i++) {
-        for (var j = 0; j < gBoard[0].length; j++) {
-            var currCell = gBoard[i][j]
-            // console.log(currCell);
-            
-            currCell.mineNegs = countActiveNegs(gBoard, i, j)
-            // console.log(currCell.mineNegs);
-            if (currCell.mineNegs && currCell.content !== MINE) {
-                
-                currCell.content = currCell.mineNegs
-
-//show the numbers at the begining 
-                // console.log(currCell.content);
-                // var elCell = document.querySelector(`.cell-${i}-${j}`)
-                
-                // // console.log(elCell);
-                // elCell.innerText = currCell.mineNegs
-            }
-        }
-    }
-    console.log(gBoard);
-    
-}
-// function getMinesNegsCount(board,celCell){
-    //     // console.log(cell);
-    //     var cellPos = getPosFromClass(celCell)
-    //     console.log(cellPos);
-    
-    //     for(var i=0; i<board.length; i++){
-        //         for(var j=0; j<board[0].length; j++)
-        //         var currCell=board[cellPos.i][cellPos.j]
-        //         // console.log(currCell);
+        var elSmily = document.querySelector('.restart-btn')
+        elSmily.innerText='😎'
         
-        //         currCell.mineNegs= countActiveNegs(board,cellPos.i, cellPos.j)
-        //         console.log(currCell.mineNegs);
-        
-        //     }
-        // }
-        // buildBoard(size)
-        function buildBoard(boardSize) {
-            const table = []
-            for (var i = 0; i < boardSize; i++) {
-                table.push([])
-                for (var j = 0; j < boardSize; j++) {
-                    // console.log(i,j);
-                    
-                    table[i][j] = { i, j, content: '', mineNegs: 0, isMarked: false, isShown: false }
-                }
-            }
-            return table
-        }
-           
+
+    }
+}
+
+
+
+
+
+
+
+      
            
            
            

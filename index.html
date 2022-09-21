@@ -8,7 +8,10 @@
 <body onload='onInitGame()'>
     <H1>Minesweeper</H1>
 
-    <button onclick="generateGrid();">Reset Grid</button>
+    <button class="restart-btn" onclick="restart();">🙂</button>
+    <button class="level-btn" id="begginer" onclick="onLevelChoose(this)">Begginer</button>
+    <button class="level-btn" id="medium" onclick="onLevelChoose(this)">Medium</button>
+    <button class="level-btn" id="expert" onclick="onLevelChoose(this)">Expert</button>
     <div class="board">
 
     </div>
