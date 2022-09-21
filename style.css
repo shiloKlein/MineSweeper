@@ -1,0 +1,32 @@
+.board{
+    width:300px;
+    height:300px;
+    background-color: black;
+
+
+}
+table{
+    margin: auto;
+}
+.cell{
+    width:50px;
+    height:50px;
+    background-color: grey;
+    text-align: center;
+    box-shadow: inset 1px 1px 15px rgba(196, 193, 193, 0.796);
+    transition: 0.3s
+}
+
+.clicked{
+    box-shadow: inset 1px 1px 15px rgba(64, 63, 63, 0.796);
+
+}
+.cell:hover{
+    box-shadow: inset 1px 1px 10px rgb(207, 28, 28);
+    transition: 0.3s;
+    }
+
+
+.flagged{
+
+}
