@@ -5,7 +5,7 @@
     /* border-collapse: collapse; */
     background-color: rgb(99, 105, 114);
     border-radius: 20px;
-
+    /* position: fixed; */
     /* box-shadow: 10px 5px 25px 10px rgb(106, 90, 214) ; */
 
 
@@ -19,11 +19,18 @@ table{
     background-color: grey;
     text-align: center;
     box-shadow: inset 1px 1px 15px rgba(196, 193, 193, 0.796);
-    transition: 0.3s
+    transition: 0.3s;
+    color: transparent
+}
+.cell span{
+    visibility: hidden;
+    /* color:blue; */
 }
 
 .clicked{
     box-shadow: inset 1px 1px 15px rgba(64, 63, 63, 0.796);
+    
+    color: blue;
 
 }
 .cell:hover{
@@ -34,4 +41,5 @@ table{
 
 .flagged{
 
+    color: black;
 }
