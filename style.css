@@ -42,12 +42,14 @@ table{
     box-shadow: inset 1px 1px 15px rgba(196, 193, 193, 0.796);
     transition: 0.3s;
     display:table-cell;
+    user-select:none;
+    text-align: center;
     /* color: transparent */
 }
 
 .cell:hover{
-    box-shadow: inset 1px 1px 10px rgb(131, 169, 25);
-    transition: 0.3s;
+    box-shadow: inset 1px 1px 10px gold;
+    transition: 0.2s;
 }
 .cell span{
     visibility: hidden;
@@ -94,11 +96,13 @@ button{
     margin: 1px;
     border-radius: 5px;
     font-weight: bold;
-
+    transition: 0.3s;
+    
 }
 button:hover{
     background-color: gold ;
-    cursor:pointer
+    cursor:pointer;
+    box-shadow: 2px 2px 5px 5px  gold ;
 }
 .lives{
     font-size: xx-large;

@@ -65,7 +65,7 @@ function onCellClicked(elCell) {
 
 
     console.log('showCount', gGame.showCount);
-
+    checkVictory()
     if (gBoard[i][j].isMine === true) {
         gLives--
         var elLives = document.querySelector('.lives');
@@ -75,7 +75,6 @@ function onCellClicked(elCell) {
             elLivesContainer.push('💖')
             elLives.innerText += elLivesContainer[0]
         }
-
         if (!gLives) {
             gameOver()
             return
@@ -96,18 +95,17 @@ function ExpandShown(rowIdx, colIdx) {
 
         for (var j = colIdx - 1; j <= colIdx + 1; j++) {
             var elCell = document.querySelector(`.cell-${i}-${j}`)
-            // console.log(elCell);
             if (j < 0 || j >= gBoard[0].length) continue
             if (i === rowIdx && j === colIdx) continue
             if (gBoard[i][j].isShown) continue
 
-            // console.log(gBoard[i][j]);
 
-            // if (!gBoard[i][j].isMine){
-            gBoard[i][j].isShown = true
-            elCell.classList.add('clicked')
-            elCell.querySelector('span').style.visibility = 'visible'
-            // } 
+            if (!gBoard[i][j].isMine&&!gBoard[i][j].isMarked) {
+                gBoard[i][j].isShown = true
+                gGame.showCount++
+                elCell.classList.add('clicked')
+                elCell.querySelector('span').style.visibility = 'visible'
+            }
             ExpandShown(i, j)
         }
     }
@@ -123,11 +121,14 @@ function gameOver() {
     elSmily.innerText = '😲'
     for (var i = 0; i < gBoard.length; i++) {
         for (var j = 0; j < gBoard[0].length; j++) {
-            // console.log(i, j);
 
             var elCell = document.querySelector(`.cell-${i}-${j}`)
-            if (gBoard[i][j].isMine) elCell.classList.add('clicked')
-            elCell.querySelector('span').style.visibility = 'visible'
+            if (gBoard[i][j].isMine) {
+                elCell.classList.add('clicked')
+                elCell.querySelector('span').style.visibility = 'visible'
+                elCell.querySelector('flag').style.visibility = 'hidden'
+
+            }
 
         }
     }
@@ -147,21 +148,17 @@ function restart() {
         gLives = 1
         document.querySelector('.lives').innerText = '💖'
         console.log(gLevel.MINES);
-
     } else {
         gLives = 3
         document.querySelector('.lives').innerText = '💖💖💖'
     }
-
-
-
     document.querySelector('.restart-btn').innerText = '🙂'
     document.querySelector('.seconds').innerText = ''
 }
 
+
 function onLevelChoose(elLvlBtn) {
     var level = elLvlBtn.id
-
     switch (level) {
         case 'begginer':
             gLevel.SIZE = 4
@@ -175,7 +172,6 @@ function onLevelChoose(elLvlBtn) {
             gLevel.SIZE = 12
             gLevel.MINES = 20
             break;
-
     }
     restart()
 
@@ -195,24 +191,29 @@ function onCellMarked(elCell) {
         gBoard[i][j].isMarked = true
         console.log(gBoard[i][j]);
         // update the DOM
-        elCell.innerText = FLAG
-        elCell.classList.add('flagged')
         console.log(elCell.innerText);
+        var elFlag = elCell.querySelector('.flag')
+        elFlag.innerText = FLAG
+        elFlag.style.visibility = 'visible'
 
         gGame.markedCount++
+        checkVictory()
 
 
     } else {
         // update the model
+        var elFlag = elCell.querySelector('.flag')
+        elFlag.innerText = FLAG
+        elFlag.style.visibility = 'hidden'
+        // var contentHolder = elCell.innerText
         gBoard[i][j].isMarked = false
         console.log(gBoard[i][j]);
         gGame.markedCount--
         // update the DOM
-        elCell.innerText = EMPTY
+        // elCell.innerText = contentHolder
 
     }
     console.log('markedCount', gGame.markedCount);
-    checkVictory()
 }
 
 function checkVictory() {
@@ -228,27 +229,27 @@ function checkVictory() {
 
 
 function onHintClick() {
-    if (gHint <= 0||gGame.showCount===0) return
+    if (gHint <= 0 || gGame.showCount === 0) return
     var elHint = document.querySelector('.hint')
     var elTable = document.querySelector('table')
-    if(!isHintoN ){
+    if (!isHintoN) {
         elHint.classList.add('hinted')
         elTable.classList.add('hinted')
         isHintoN = true
-    }else{
+    } else {
         elHint.classList.remove('hinted')
         elTable.classList.remove('hinted')
         isHintoN = false
     }
 
 
-   
+
 
 
 
 }
 function giveHint(elcell) {
-    
+
     var rowIdx = +getPosFromClass(elcell).i
     var colIdx = +getPosFromClass(elcell).j
     console.log(rowIdx);
@@ -269,7 +270,7 @@ function giveHint(elcell) {
 
         }
     }
-    
+
 }
 
 
@@ -298,12 +299,12 @@ function hideHint(elcell) {
     elHint.classList.remove('hinted')
     elTable.classList.remove('hinted')
     var elHintSigns = document.querySelector('.hint-sign');
-            elHintSigns.innerText = '';
-            var elHintsSignContainer = []
-            for (i = 1; i <= gHint; i++) {
-                elHintsSignContainer.push('💡')
-                elHintSigns.innerText += elHintsSignContainer[0]
-            }
+    elHintSigns.innerText = '';
+    var elHintsSignContainer = []
+    for (i = 1; i <= gHint; i++) {
+        elHintsSignContainer.push('💡')
+        elHintSigns.innerText += elHintsSignContainer[0]
+    }
 }
 
 
