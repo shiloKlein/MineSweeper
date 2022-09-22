@@ -83,7 +83,7 @@ function onCellClicked(elCell) {
     }
     gGame.showCount++
     checkVictory()
-    ExpandShown(i, j)//   recurtion!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ExpandShown(i, j)//   recurtion!!!!!!!!
 }
 
 // opening all the permitted nighbor cells
@@ -127,7 +127,7 @@ function gameOver() {
             if (gBoard[i][j].isMine) {
                 elCell.classList.add('clicked')
                 elCell.querySelector('span').style.visibility = 'visible'
-                elCell.querySelector('flag').style.visibility = 'hidden'
+                elCell.querySelector('.flag').style.visibility = 'hidden'
 
             }
 
@@ -172,7 +172,7 @@ function onLevelChoose(elLvlBtn) {
             break;
         case 'expert':
             gLevel.SIZE = 12
-            gLevel.MINES = 20
+            gLevel.MINES = 32
             break;
     }
     restart()
