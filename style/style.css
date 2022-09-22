@@ -16,13 +16,15 @@ footer{
   font-weight:800;
   color:rgb(0, 0, 0)
   }
+  .extra-btns{
+    display:inline
+  }
 .board{
     width:70%;
-    margin:5px auto 350px auto;
+    margin:5px 10px 350px 10px;
     border-radius: 20px;
-  
-
-
+    display: inline;
+    
 }
 table{
     margin: auto;
@@ -61,7 +63,7 @@ table{
 .timer {
     height: 70px;
     width: 80px;
-    background-color: rgb(137, 119, 17);
+    background-color: rgb(206, 179, 27);
     margin:auto;
     padding-top: 10px;
     font-weight: bold;
@@ -77,6 +79,7 @@ table{
 .restart-btn{
     width:40px;
     height: 40px;
+    text-align: center;
     text-size-adjust: 50px;
     border-radius: 5px;
     background-color: rgb(150, 163, 163);
@@ -85,7 +88,7 @@ table{
 }
 
 button{
-    background-color: rgb(137, 119, 17);
+    background-color: rgb(206, 179, 27);
     width: 70px;
     height: 50px;
     margin: 1px;
@@ -93,6 +96,18 @@ button{
     font-weight: bold;
 
 }
+button:hover{
+    background-color: gold ;
+    cursor:pointer
+}
 .lives{
-    font-size: x-large;
+    font-size: xx-large;
+}
+
+.hinted{
+    box-shadow: 5px 5px 50px 5px gold;
+    background-color: gold;
+}
+.hint-sign{
+    font-size:x-large;
 }

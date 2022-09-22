@@ -7,14 +7,11 @@ function setMinesNegsCount() {
             // console.log(currCell);
             var elCell = document.querySelector(`.cell-${i}-${j} span`)
             currCell.mineNegs = countActiveNegs(gBoard, i, j)
-            // console.log(currCell.mineNegs);
             if (currCell.mineNegs && !currCell.isMine) {
-
                 elCell.innerText = currCell.mineNegs
             }
         }
     }
-    // console.log(gBoard);
 }
 
 function countActiveNegs(board, rowIdx, colIdx) {
@@ -41,8 +38,7 @@ function createMines(board, row, col) {
             for (var j = 0; j < board[0].length; j++) {
 
                 if (i === row && j === col) continue
-                emptyPos.push({ i, j })
-                
+                emptyPos.push({ i, j }) 
             }
         }
         for (var h = 0; h < gLevel.MINES; h++) {
@@ -56,11 +52,8 @@ function createMines(board, row, col) {
             
         }
     }
-    console.table(board);
-
-
-
 }
+
 function renderBoard(mat, selector) {
 
     var strHTML = '<table><tbody>'
@@ -68,13 +61,7 @@ function renderBoard(mat, selector) {
 
         strHTML += '<tr>'
         for (var j = 0; j < mat[0].length; j++) {
-            
-            // const cell = mat[i][j]
-            // var content =''
-            // if(cell.isMine)content = '💣'
-            // console.log(cell.isMine);
-            
-            // if(cell.mineNegs)content = cell.mineNegs
+       
             const className = 'cell cell-' + i + '-' + j
             strHTML += `<td onclick="onCellClicked(this)" oncontextmenu="onCellMarked(this);return false;" 
             class="${className}"><span></span></td>`
@@ -92,8 +79,6 @@ function buildBoard(boardSize) {
     for (var i = 0; i < boardSize; i++) {
         table.push([])
         for (var j = 0; j < boardSize; j++) {
-            // console.log(i,j);
-
             table[i][j] = { i, j, isMine:false, mineNegs: 0, isMarked: false, isShown: false }
         }
     }
