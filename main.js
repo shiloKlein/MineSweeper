@@ -26,6 +26,7 @@ var gLives = 1
 var isHintoN = false
 var gHint = 3
 
+
 function onInitGame() {
     gBoard = buildBoard(gLevel.SIZE)
     renderBoard(gBoard, '.board')
@@ -33,7 +34,7 @@ function onInitGame() {
 
 }
 
-
+// the main gameplay when clicking left click
 function onCellClicked(elCell) {
 
     if (isHintoN) {
@@ -85,7 +86,7 @@ function onCellClicked(elCell) {
     ExpandShown(i, j)//   recurtion!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-
+// opening all the permitted nighbor cells
 function ExpandShown(rowIdx, colIdx) {
     // if (!gBoard[rowIdx][colIdx].isMine) gGame.showCount++
     if (gBoard[rowIdx][colIdx].mineNegs ||
@@ -144,6 +145,7 @@ function restart() {
     gGame.showCount = 0
     gGame.showCount = 0
     isHintoN = false
+    gHint = 3
     if (gLevel.SIZE === 4) {
         gLives = 1
         document.querySelector('.lives').innerText = '💖'
@@ -156,7 +158,7 @@ function restart() {
     document.querySelector('.seconds').innerText = ''
 }
 
-
+// changing the level on user demand
 function onLevelChoose(elLvlBtn) {
     var level = elLvlBtn.id
     switch (level) {
@@ -177,7 +179,7 @@ function onLevelChoose(elLvlBtn) {
 
 }
 
-
+// handaling right click flagging
 function onCellMarked(elCell) {
     if (!gGame.isOn) return
     if (!gGame.showCount) startTimer()
@@ -227,7 +229,7 @@ function checkVictory() {
 }
 
 
-
+// handaling the click on the hint button
 function onHintClick() {
     if (gHint <= 0 || gGame.showCount === 0) return
     var elHint = document.querySelector('.hint')
@@ -248,6 +250,7 @@ function onHintClick() {
 
 
 }
+// handaling the hint itself
 function giveHint(elcell) {
 
     var rowIdx = +getPosFromClass(elcell).i
@@ -262,7 +265,7 @@ function giveHint(elcell) {
             if (j < 0 || j >= gBoard[0].length) continue
             console.log(i, j);
 
-            if (isHintoN) { }
+            if (isHintoN) {}
             var elNegCell = document.querySelector(`.cell-${i}-${j}`)
             elNegCell.classList.add('clicked')
             elNegCell.querySelector('span').style.visibility = 'visible'

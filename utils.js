@@ -24,8 +24,6 @@ function getPosFromClass(el){
     return pos; 
 }
 
-
-
 function startTimer() {
     gTime = Date.now()
     gTimeInterval = setInterval(updateTimer, 100)
