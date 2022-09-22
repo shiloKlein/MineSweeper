@@ -1,0 +1,98 @@
+body{
+    text-align: center;
+    background-image:url(mine.jpeg) ;
+    background-repeat:no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+footer{
+  /* position: absolute; */
+  position: fixed;
+  bottom: 0;
+  /* left:70%; */
+  width: 150px;
+  height: 60px;
+  font-weight:800;
+  color:rgb(0, 0, 0)
+  }
+.board{
+    width:70%;
+    margin:5px auto 350px auto;
+    border-radius: 20px;
+  
+
+
+}
+table{
+    margin: auto;
+    border-radius: 20px;
+    border: solid 8px rgba(216, 195, 32,0.4);
+    background-color: rgba(199, 188, 188, 0.7);
+}
+.cell{
+    width:50px;
+    height:50px;
+    min-width:50px;
+    min-height:50px;
+    background-color: rgb(122, 131, 116);
+    text-align: center;
+    box-shadow: inset 1px 1px 15px rgba(196, 193, 193, 0.796);
+    transition: 0.3s;
+    display:table-cell;
+    /* color: transparent */
+}
+
+.cell:hover{
+    box-shadow: inset 1px 1px 10px rgb(131, 169, 25);
+    transition: 0.3s;
+}
+.cell span{
+    visibility: hidden;
+    /* color:blue; */
+}
+
+.clicked{
+    box-shadow: inset 1px 1px 15px rgba(64, 63, 63, 0.796);
+    
+    color: rgb(44, 44, 102);
+}
+
+.timer {
+    height: 70px;
+    width: 80px;
+    background-color: rgb(137, 119, 17);
+    margin:auto;
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: larger;
+    text-align: center;
+    border-radius: 8px;
+    
+}
+.timer span{
+    color:white;
+}
+
+.restart-btn{
+    width:40px;
+    height: 40px;
+    text-size-adjust: 50px;
+    border-radius: 5px;
+    background-color: rgb(150, 163, 163);
+    font-size:x-large;
+    margin-top:30;
+}
+
+button{
+    background-color: rgb(137, 119, 17);
+    width: 70px;
+    height: 50px;
+    margin: 1px;
+    border-radius: 5px;
+    font-weight: bold;
+
+}
+.lives{
+    font-size: x-large;
+}

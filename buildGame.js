@@ -5,7 +5,7 @@ function setMinesNegsCount() {
         for (var j = 0; j < gBoard[0].length; j++) {
             var currCell = gBoard[i][j]
             // console.log(currCell);
-            var elCell = document.querySelector(`.cell-${i}-${j}`)
+            var elCell = document.querySelector(`.cell-${i}-${j} span`)
             currCell.mineNegs = countActiveNegs(gBoard, i, j)
             // console.log(currCell.mineNegs);
             if (currCell.mineNegs && !currCell.isMine) {
@@ -51,7 +51,7 @@ function createMines(board, row, col) {
             // UPDATE THE MODEL
             board[minePos[0].i][minePos[0].j].isMine = true
             // UPDATE THE DOM
-            var elCell= document.querySelector(`.cell-${[minePos[0].i]}-${[minePos[0].j]}`)
+            var elCell= document.querySelector(`.cell-${[minePos[0].i]}-${[minePos[0].j]} span`)
             elCell.innerText=MINE
             
         }
@@ -77,7 +77,7 @@ function renderBoard(mat, selector) {
             // if(cell.mineNegs)content = cell.mineNegs
             const className = 'cell cell-' + i + '-' + j
             strHTML += `<td onclick="onCellClicked(this)" oncontextmenu="onCellMarked(this);return false;" 
-            class="${className}"></td>`
+            class="${className}"><span></span></td>`
         }
         strHTML += '</tr>'
     }

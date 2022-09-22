@@ -2,24 +2,29 @@
 
 
 <head>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body onload='onInitGame()'>
     <H1>Minesweeper</H1>
-
-    <button class="restart-btn" onclick="restart();">🙂</button>
+    <div class="timer">time passed:<br><span class="minutes"></span><span class="seconds"></span></div><br>
     <button class="level-btn" id="begginer" onclick="onLevelChoose(this)">Begginer</button>
     <button class="level-btn" id="medium" onclick="onLevelChoose(this)">Medium</button>
-    <button class="level-btn" id="expert" onclick="onLevelChoose(this)">Expert</button>
+    <button class="level-btn" id="expert" onclick="onLevelChoose(this)">Expert</button><br>
+    <div class="lives">💖</div>
+    <button class="restart-btn" onclick="restart();">🙂</button>
     <div class="board">
-
+        
     </div>
-
+    
     <script src="utils.js"></script>
     <script src="buildGame.js"></script>
     <script src="main.js"></script>
-
+    
+    <footer>
+        <hr>
+        <p>by Shilo Klein</p>
+    </footer>
 </body>
 
 </html>

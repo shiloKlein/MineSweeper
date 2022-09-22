@@ -65,19 +65,35 @@ function getPosFromClass(el){
 // }
 
 
-function recursiveNegsBlower(board, rowIdx, colIdx){
-    for(var i = rowIdx - 1; i <= rowIdx + 1; i++ ) {
-    if (i < 0 || i >= gBoard.length) continue
-    for(var j = colIdx - 1; j <= colIdx + 1; j++){
-        if(!board[i][j]){
 
-        recursiveNegsBlower(board, i, j)
-        //open the empty pos
-        }else{
-            //reveal the numbered pos and return
-            // maybe it is neded to push to new array and from him to rrange it
-        }
 
-    }
+
+
+function startTimer() {
+    gTime = Date.now()
+    gTimeInterval = setInterval(updateTimer, 100)
+
 }
+
+function updateTimer() {
+    var diff = Date.now() - gTime
+    var seconds = +(diff / 1000).toFixed(0)
+    // var minutes=parseInt((seconds/60))
+    // seconds=seconds-minutes*60+seconds
+    // if(seconds===5){
+    //     seconds=0
+    //     minutes+=1
+    // }
+    // console.log(minutes);
+    // var elTimer =document.querySelector('.timer')
+
+   document.querySelector('.seconds').innerText = seconds
+    // var elMinutes = document.querySelector('.minutes').innerText = minutes+':'
 }
+
+function stopTimer() {
+    clearInterval(gTimeInterval)
+}
+
+
+
