@@ -25,7 +25,9 @@ var gLives = 1
 
 var isHintoN = false
 var gHint = 3
-
+var isMegaHintOn = false
+var gMegaHint = 1
+var megaHintCells = []
 
 function onInitGame() {
     gBoard = buildBoard(gLevel.SIZE)
@@ -34,7 +36,7 @@ function onInitGame() {
 
 }
 
-// the main gameplay when clicking left click
+
 function onCellClicked(elCell) {
 
     if (isHintoN) {
@@ -42,6 +44,20 @@ function onCellClicked(elCell) {
         gHint--
         return
     }
+    if (isMegaHintOn) {
+
+        megaHintCells.push(elCell)
+        if (megaHintCells.length === 2){
+        giveMegaHint(megaHintCells)
+        console.log(megaHintCells);
+        megaHintCells=[]    
+        console.log(megaHintCells.length);
+        
+    }     
+            
+        return
+    }
+
     var i = +getPosFromClass(elCell).i//get the elcell position
     var j = +getPosFromClass(elCell).j//get the elcell position
 
@@ -69,6 +85,8 @@ function onCellClicked(elCell) {
     checkVictory()
     if (gBoard[i][j].isMine === true) {
         gLives--
+        gGame.markedCount++//adding to the count even though it is not a mark for the victory check
+
         var elLives = document.querySelector('.lives');
         elLives.innerText = '';
         var elLivesContainer = []
@@ -83,12 +101,11 @@ function onCellClicked(elCell) {
     }
     gGame.showCount++
     checkVictory()
-    ExpandShown(i, j)//   recurtion!!!!!!!!
+    ExpandShown(i, j)//   recurtion!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-// opening all the permitted nighbor cells
+
 function ExpandShown(rowIdx, colIdx) {
-    // if (!gBoard[rowIdx][colIdx].isMine) gGame.showCount++
     if (gBoard[rowIdx][colIdx].mineNegs ||
         gBoard[rowIdx][colIdx].isMine) return
     for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
@@ -101,7 +118,7 @@ function ExpandShown(rowIdx, colIdx) {
             if (gBoard[i][j].isShown) continue
 
 
-            if (!gBoard[i][j].isMine&&!gBoard[i][j].isMarked) {
+            if (!gBoard[i][j].isMine && !gBoard[i][j].isMarked) {
                 gBoard[i][j].isShown = true
                 gGame.showCount++
                 elCell.classList.add('clicked')
@@ -124,11 +141,11 @@ function gameOver() {
         for (var j = 0; j < gBoard[0].length; j++) {
 
             var elCell = document.querySelector(`.cell-${i}-${j}`)
+            console.log(elCell);
+            
             if (gBoard[i][j].isMine) {
                 elCell.classList.add('clicked')
                 elCell.querySelector('span').style.visibility = 'visible'
-                elCell.querySelector('.flag').style.visibility = 'hidden'
-
             }
 
         }
@@ -145,7 +162,7 @@ function restart() {
     gGame.showCount = 0
     gGame.showCount = 0
     isHintoN = false
-    gHint = 3
+    gMegaHint=1
     if (gLevel.SIZE === 4) {
         gLives = 1
         document.querySelector('.lives').innerText = '💖'
@@ -158,7 +175,7 @@ function restart() {
     document.querySelector('.seconds').innerText = ''
 }
 
-// changing the level on user demand
+
 function onLevelChoose(elLvlBtn) {
     var level = elLvlBtn.id
     switch (level) {
@@ -168,18 +185,18 @@ function onLevelChoose(elLvlBtn) {
             break;
         case 'medium':
             gLevel.SIZE = 8
-            gLevel.MINES = 14
+            gLevel.MINES = 6
             break;
         case 'expert':
             gLevel.SIZE = 12
-            gLevel.MINES = 32
+            gLevel.MINES = 20
             break;
     }
     restart()
 
 }
 
-// handaling right click flagging
+
 function onCellMarked(elCell) {
     if (!gGame.isOn) return
     if (!gGame.showCount) startTimer()
@@ -229,8 +246,11 @@ function checkVictory() {
 }
 
 
-// handaling the click on the hint button
+
 function onHintClick() {
+
+    if(isMegaHintOn)hideMegaHint
+
     if (gHint <= 0 || gGame.showCount === 0) return
     var elHint = document.querySelector('.hint')
     var elTable = document.querySelector('table')
@@ -250,7 +270,6 @@ function onHintClick() {
 
 
 }
-// handaling the hint itself
 function giveHint(elcell) {
 
     var rowIdx = +getPosFromClass(elcell).i
@@ -265,7 +284,7 @@ function giveHint(elcell) {
             if (j < 0 || j >= gBoard[0].length) continue
             console.log(i, j);
 
-            if (isHintoN) {}
+            // if (isHintoN) { }
             var elNegCell = document.querySelector(`.cell-${i}-${j}`)
             elNegCell.classList.add('clicked')
             elNegCell.querySelector('span').style.visibility = 'visible'
@@ -275,6 +294,7 @@ function giveHint(elcell) {
     }
 
 }
+
 
 
 function hideHint(elcell) {
@@ -311,6 +331,143 @@ function hideHint(elcell) {
 }
 
 
+function onMegaHintClick() {
+    if(isHintoN) hideHint
+    
+
+    if (gHint <= 0 || gGame.showCount === 0) return
+    var elMegaHint = document.querySelector('.mega-hint')
+    var elTable = document.querySelector('table')
+    var elBtns = document.querySelectorAll('button')
+    var elTimer = document.querySelector('.timer')
+    
+    if (!isMegaHintOn) {
+        elMegaHint.innerText = `${gMegaHint} left`
+        elMegaHint.classList.add('hinted')
+        elTable.classList.add('hinted')
+        elTimer.classList.add('hinted')
+        for (var i = 0; i < elBtns.length; i++) {
+            elBtns[i].classList.add('hinted')
+        }
+        isMegaHintOn = true
+    } else {
+        elMegaHint.innerText = `MEGA HINT`
+        elMegaHint.classList.remove('hinted')
+        elTable.classList.remove('hinted')
+        elTimer.classList.remove('hinted')
+        for (var i = 0; i < elBtns.length; i++) {
+            elBtns[i].classList.remove('hinted')
+        }
+        isMegaHintOn = false
+    }
+
+
+}
+
+
+function giveMegaHint(elCells) {
+
+    
+    
+    var topRowIdx = +getPosFromClass(elCells[0]).i
+    var leftColIdx = +getPosFromClass(elCells[0]).j
+    var bottomRowIdx = +getPosFromClass(elCells[1]).i
+    var rightColIdx = +getPosFromClass(elCells[1]).j
+    // console.log(rowIdx);
+    
+    if ( (leftColIdx-topRowIdx)===(rightColIdx-bottomRowIdx)&&
+        topRowIdx < bottomRowIdx && leftColIdx < rightColIdx) {
+            for (var i = topRowIdx; i <= bottomRowIdx; i++) {
+                
+                console.log('asdlfk');
+
+            for (var j = leftColIdx; j <= rightColIdx; j++) {
+                // console.log(elCell);
+                console.log(i, j);
+
+                var elCell = document.querySelector(`.cell-${i}-${j}`)
+                elCell.classList.add('clicked')
+                elCell.querySelector('span').style.visibility = 'visible'
+
+                gMegaHint=0
+                
+                setTimeout(hideMegaHint, 2000, topRowIdx, bottomRowIdx, leftColIdx, rightColIdx);
+            }
+        }
+    } else hideMegaHint
+}
 
 
 
+function hideMegaHint(topRow, BottomRow, leftCole, rightCol) {
+   
+    isMegaHintOn = false
+
+    for (var i = topRow; i <= BottomRow; i++) {
+        for (var j = leftCole; j <= rightCol; j++) {
+            var elCell=document.querySelector(`.cell-${i}-${j}`)
+            if (!gBoard[i][j].isShown) {
+            elCell.classList.remove('clicked')
+            elCell.querySelector('span').style.visibility = 'hidden'
+            }
+        }
+
+    }
+    var elMegaHint = document.querySelector('.mega-hint')
+    var elTable = document.querySelector('table')
+    var elBtns = document.querySelectorAll('button')
+    var elTimer = document.querySelector('.timer')
+    elMegaHint.innerText = `MEGA HINT`
+    elMegaHint.classList.remove('hinted')
+    elTable.classList.remove('hinted')
+    elTimer.classList.remove('hinted')
+    for (var i = 0; i < elBtns.length; i++) {
+        elBtns[i].classList.remove('hinted')
+      
+    }
+}
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+    //     var elNegCell = document.querySelector(`.cell-${i}-${j}`)
+    //     elNegCell.classList.add('clicked')
+    //     elNegCell.querySelector('span').style.visibility = 'visible'
+    //     setTimeout(hideMegaHint, 2000, topRowIdx,leftColIdx,bottomRowIdx,rightColIdx);
+    // }
+
+    // for (var i = rowIdx - 1; i <= rowIdx + 1; i++) {
+    //     if (i < 0 || i >= gBoard.length) continue
+
+    //     for (var j = colIdx - 1; j <= colIdx + 1; j++) {
+    //         // console.log(elCell);
+    //         if (j < 0 || j >= gBoard[0].length) continue
+    //         var elNegCell = document.querySelector(`.cell-${i}-${j}`)
+    //         if (!gBoard[i][j].isShown) {
+    //             elNegCell.classList.remove('clicked')
+    //             elNegCell.querySelector('span').style.visibility = 'hidden'
+    //         }
+
+    //     }
+    // }
+    
+    
+    // var elHint = document.querySelector('.hint')
+    // var elTable = document.querySelector('table')
+    // elHint.classList.remove('hinted')
+    // elTable.classList.remove('hinted')
+    // var elHintSigns = document.querySelector('.hint-sign');
+    // elHintSigns.innerText = '';
+    // var elHintsSignContainer = []
+    // for (i = 1; i <= gHint; i++) {
+        //     elHintsSignContainer.push('💡')
+        //     elHintSigns.innerText += elHintsSignContainer[0]

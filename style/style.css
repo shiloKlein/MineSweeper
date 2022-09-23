@@ -44,7 +44,6 @@ table{
     display:table-cell;
     user-select:none;
     text-align: center;
-    /* color: transparent */
 }
 
 .cell:hover{
@@ -53,6 +52,7 @@ table{
 }
 .cell span{
     visibility: hidden;
+    position: absolute;
     /* color:blue; */
 }
 
@@ -115,3 +115,23 @@ button:hover{
 .hint-sign{
     font-size:x-large;
 }
+.big-btn{
+  margin:-96px 0px 0px 0px ;
+  display: inline-block;
+  height: 80px;
+  background-color: rgb(234, 201, 15) ;
+}
+/* .safe-click{
+  margin:15px 0px 0px 0px ;
+  display: inline-block;
+  height: 80px
+} */
+.hint{
+  margin: 15px 0px 0px 0px;
+  width:40px;
+ height: 80px;
+ 
+  
+}
+
+

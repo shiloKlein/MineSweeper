@@ -24,6 +24,8 @@ function getPosFromClass(el){
     return pos; 
 }
 
+
+
 function startTimer() {
     gTime = Date.now()
     gTimeInterval = setInterval(updateTimer, 100)
@@ -33,6 +35,9 @@ function startTimer() {
 function updateTimer() {
     var diff = Date.now() - gTime
     var seconds = +(diff / 1000).toFixed(0)
+
+
+    
 
    document.querySelector('.seconds').innerText = seconds
     
