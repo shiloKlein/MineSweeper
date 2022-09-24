@@ -17,30 +17,32 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-function getPosFromClass(el){
+function getPosFromClass(el) {
 
     var splittedClass = el.classList[1].split('-')
-    var pos = {i:splittedClass[1],j:splittedClass[2]}
-    return pos; 
+    var pos = { i: splittedClass[1], j: splittedClass[2] }
+    return pos;
 }
 
 
 
 function startTimer() {
     gTime = Date.now()
+   
     gTimeInterval = setInterval(updateTimer, 100)
 
 }
 
 function updateTimer() {
     var diff = Date.now() - gTime
-    var seconds = +(diff / 1000).toFixed(0)
+    var infSeconds = +(diff / 1000).toFixed(0)
+    seconds = infSeconds < 60 ? infSeconds : infSeconds % 60
+    if (infSeconds>60&&infSeconds % 60 === 0) minutes++
 
 
-    
+    document.querySelector('.seconds').innerText = seconds
+    document.querySelector('.minutes').innerText = `${minutes}:`
 
-   document.querySelector('.seconds').innerText = seconds
-    
 }
 
 function stopTimer() {

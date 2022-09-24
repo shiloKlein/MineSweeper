@@ -79,7 +79,12 @@ function buildBoard(boardSize) {
     for (var i = 0; i < boardSize; i++) {
         table.push([])
         for (var j = 0; j < boardSize; j++) {
-            table[i][j] = { i, j, isMine:false, mineNegs: 0, isMarked: false, isShown: false }
+            table[i][j] = {
+                 i, j,
+                 isMine:false,
+                 mineNegs: 0,
+                  isMarked: false, 
+                  isShown: false }
         }
     }
     return table
