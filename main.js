@@ -23,7 +23,7 @@ var gBoard
 
 var gTime
 var gTimeInterval
-var seconds = 0
+var seconds=0
 var minutes = 0
 
 
@@ -39,6 +39,7 @@ function onInitGame() {
     gBoard = buildBoard(gLevel.SIZE)
     renderBoard(gBoard, '.board')
     gGame.isOn = true
+    renderBestScore()
 
 }
 
@@ -102,8 +103,8 @@ function onCellClicked(elCell) {
             gameOver()
             return
         }
-    }
-    gGame.showCount++
+    }else gGame.showCount++
+   
     checkVictory()
     ExpandShown(i, j)//   recurtion!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
@@ -131,6 +132,7 @@ function ExpandShown(rowIdx, colIdx) {
             ExpandShown(i, j)
         }
     }
+    checkVictory()
 }
 
 function gameOver() {
@@ -167,6 +169,8 @@ function restart() {
     isHintoN = false
     gMegaHint = 1
     safeClickLeft = 3
+    seconds = 0
+    minutes = 0
 
     if (gLevel.SIZE === 4) {
         gLives = 1
@@ -182,6 +186,7 @@ function restart() {
     document.querySelector('.safe-click').innerText = 'SAFE CLICK 🔍🔍🔍'
     document.querySelector('.restart-btn').innerText = '🙂'
     document.querySelector('.seconds').innerText = ''
+    document.querySelector('.minutes').innerText = ''
 }
 
 
@@ -250,18 +255,60 @@ function checkVictory() {
         stopTimer()
         var elSmily = document.querySelector('.restart-btn')
         elSmily.innerText = '😎'
-        var currBestScoreStr 
-        if(currBestScoreStr) {
-            currBestScoreStr = localStorage.getItem('bestScore')
-            var splitedBestScore = currBestScoreStr.split(':')
-
-            if (+s[0] <= +minutes && +s[1] < +seconds) {
-                localStorage.setItem('bestScore', `${+splitedBestScore[0]}:${+splitedBestScore[1]}`)
-            }
-
-        }else localStorage.setItem('bestScore', `${minutes}:${seconds}`)
+        updateBestScore()
 
     }
 }
 
+function updateBestScore() {
+    var prevBestScoreStr
+    var levelBest
+    // var prevBestScoreStr=
+    switch (gLevel.SIZE) {
+        case 4:
+            levelBest = 'begginerBest'
+            prevBestScoreStr = localStorage.getItem(levelBest)
+            break;
+        case 8:
+            levelBest = 'mediumBest'
+            prevBestScoreStr = localStorage.getItem(levelBest)
+            break;
+        case 12:
+            levelBest = 'expertBest'
+            prevBestScoreStr = localStorage.getItem(levelBest)
+            break;
+    }
+    if (prevBestScoreStr) {
+        var splitedBestScore = prevBestScoreStr.split(':')
+        console.log(+minutes, +splitedBestScore[0], +seconds, +splitedBestScore[1], levelBest, splitedBestScore);
+        if (minutes <+splitedBestScore[0]||
+            (+minutes <= +splitedBestScore[0] && +seconds < +splitedBestScore[1])) {
+            localStorage.setItem(levelBest, `${+minutes}:${+seconds}`)
+        }
+
+    } else localStorage.setItem(levelBest, `${minutes}:${seconds}`)
+    renderBestScore()
+}
+function renderBestScore() {
+    var elCurrBest
+    var elCurrLevel
+    switch (gLevel.SIZE) {
+        case 4:
+            elCurrLevel = 'begginer'
+            elCurrBest = document.querySelector(`.${elCurrLevel}-best`)
+            elCurrBest.innerText =`${elCurrLevel} best time:`
+            elCurrBest.innerText+=  localStorage.getItem(`${elCurrLevel}Best`)?localStorage.getItem(`${elCurrLevel}Best`):'--'
+           
+        case 8:
+            elCurrLevel = 'medium'
+            elCurrBest = document.querySelector(`.${elCurrLevel}-best`)
+            elCurrBest.innerText =`${elCurrLevel} best time:`
+            elCurrBest.innerText+=  localStorage.getItem(`${elCurrLevel}Best`)?localStorage.getItem(`${elCurrLevel}Best`):'--'
+        case 12:
+            elCurrLevel = 'expert'
+            elCurrBest = document.querySelector(`.${elCurrLevel}-best`)
+            elCurrBest.innerText =`${elCurrLevel} best time:`
+            elCurrBest.innerText+=  localStorage.getItem(`${elCurrLevel}Best`)?localStorage.getItem(`${elCurrLevel}Best`):'--'
+        }
+}
 

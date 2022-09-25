@@ -124,9 +124,7 @@ function giveMegaHint(elCells) {
             
             
             for (var j = leftColIdx; j <= rightColIdx; j++) {
-                // console.log(elCell);
-                console.log(i, j);
-                
+                // console.log(elCell);                
                 var elCell = document.querySelector(`.cell-${i}-${j}`)
                 elCell.classList.add('clicked')
                 elCell.querySelector('span').style.visibility = 'visible'

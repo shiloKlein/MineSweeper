@@ -28,8 +28,8 @@ function getPosFromClass(el) {
 
 function startTimer() {
     gTime = Date.now()
-   
-    gTimeInterval = setInterval(updateTimer, 100)
+
+    gTimeInterval = setInterval(updateTimer, 1000)
 
 }
 
@@ -37,7 +37,9 @@ function updateTimer() {
     var diff = Date.now() - gTime
     var infSeconds = +(diff / 1000).toFixed(0)
     seconds = infSeconds < 60 ? infSeconds : infSeconds % 60
-    if (infSeconds>60&&infSeconds % 60 === 0) minutes++
+    if (infSeconds >= 60 && infSeconds % 60 === 0) minutes++
+    console.log(minutes);
+
 
 
     document.querySelector('.seconds').innerText = seconds
