@@ -23,7 +23,7 @@ var gBoard
 
 var gTime
 var gTimeInterval
-var seconds=0
+var seconds = 0
 var minutes = 0
 
 
@@ -32,6 +32,10 @@ var gHint = 3
 var isMegaHintOn = false
 var gMegaHint = 1
 var megaHintCells = []
+var isPlacingMines = false
+var isManualOn = false
+var lastLevel
+
 
 var safeClickLeft = 3
 
@@ -57,12 +61,14 @@ function onCellClicked(elCell) {
             giveMegaHint(megaHintCells)
             console.log(megaHintCells);
             megaHintCells = []
-            console.log(megaHintCells.length);
         }
 
         return
     }
-
+    if (isPlacingMines) {
+        manualMininig(elCell)
+        return
+    }
     var i = +getPosFromClass(elCell).i//get the elcell position
     var j = +getPosFromClass(elCell).j//get the elcell position
 
@@ -71,7 +77,7 @@ function onCellClicked(elCell) {
     console.log(gGame.showCount);
     if (!gGame.showCount) {
         startTimer()
-        createMines(gBoard, i, j)
+        if (!isManualOn) createMines(gBoard, i, j)
         setMinesNegsCount()
     }
     // update the model
@@ -103,8 +109,8 @@ function onCellClicked(elCell) {
             gameOver()
             return
         }
-    }else gGame.showCount++
-   
+    } else gGame.showCount++
+
     checkVictory()
     ExpandShown(i, j)//   recurtion!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
@@ -162,10 +168,11 @@ function restart() {
     stopTimer()
     onInitGame()
     console.log(gGame);
+    if (!isPlacingMines) isManualOn = false
     gGame.markedCount = 0
     gGame.secsPassed = 0
     gGame.showCount = 0
-    gGame.showCount = 0
+    gLevel.MINES = lastLevel ? lastLevel : 2
     isHintoN = false
     gMegaHint = 1
     safeClickLeft = 3
@@ -187,6 +194,7 @@ function restart() {
     document.querySelector('.restart-btn').innerText = '🙂'
     document.querySelector('.seconds').innerText = ''
     document.querySelector('.minutes').innerText = ''
+    hideAll()
 }
 
 
@@ -197,14 +205,17 @@ function onLevelChoose(elLvlBtn) {
         case 'begginer':
             gLevel.SIZE = 4
             gLevel.MINES = 2
+            lastLevel = gLevel.MINES
             break;
         case 'medium':
             gLevel.SIZE = 8
             gLevel.MINES = 14
+            lastLevel = gLevel.MINES
             break;
         case 'expert':
             gLevel.SIZE = 12
             gLevel.MINES = 32
+            lastLevel = gLevel.MINES
             break;
     }
     restart()
@@ -212,7 +223,7 @@ function onLevelChoose(elLvlBtn) {
 
 
 function onCellMarked(elCell) {
-    if (!gGame.isOn) return
+    if (!gGame.isOn||isPlacingMines) return
     if (!gGame.showCount) startTimer()
     // console.log(elCell);
     var i = +getPosFromClass(elCell).i
@@ -261,6 +272,7 @@ function checkVictory() {
 }
 
 function updateBestScore() {
+    if(isManualOn)return
     var prevBestScoreStr
     var levelBest
     // var prevBestScoreStr=
@@ -280,8 +292,8 @@ function updateBestScore() {
     }
     if (prevBestScoreStr) {
         var splitedBestScore = prevBestScoreStr.split(':')
-        console.log(+minutes, +splitedBestScore[0], +seconds, +splitedBestScore[1], levelBest, splitedBestScore);
-        if (minutes <+splitedBestScore[0]||
+        // console.log(+minutes, +splitedBestScore[0], +seconds, +splitedBestScore[1], levelBest, splitedBestScore);
+        if (minutes < +splitedBestScore[0] ||
             (+minutes <= +splitedBestScore[0] && +seconds < +splitedBestScore[1])) {
             localStorage.setItem(levelBest, `${+minutes}:${+seconds}`)
         }
@@ -296,19 +308,19 @@ function renderBestScore() {
         case 4:
             elCurrLevel = 'begginer'
             elCurrBest = document.querySelector(`.${elCurrLevel}-best`)
-            elCurrBest.innerText =`${elCurrLevel} best time:`
-            elCurrBest.innerText+=  localStorage.getItem(`${elCurrLevel}Best`)?localStorage.getItem(`${elCurrLevel}Best`):'--'
-           
+            elCurrBest.innerText = `${elCurrLevel} best time:`
+            elCurrBest.innerText += localStorage.getItem(`${elCurrLevel}Best`) ? localStorage.getItem(`${elCurrLevel}Best`) : '--'
+
         case 8:
             elCurrLevel = 'medium'
             elCurrBest = document.querySelector(`.${elCurrLevel}-best`)
-            elCurrBest.innerText =`${elCurrLevel} best time:`
-            elCurrBest.innerText+=  localStorage.getItem(`${elCurrLevel}Best`)?localStorage.getItem(`${elCurrLevel}Best`):'--'
+            elCurrBest.innerText = `${elCurrLevel} best time:`
+            elCurrBest.innerText += localStorage.getItem(`${elCurrLevel}Best`) ? localStorage.getItem(`${elCurrLevel}Best`) : '--'
         case 12:
             elCurrLevel = 'expert'
             elCurrBest = document.querySelector(`.${elCurrLevel}-best`)
-            elCurrBest.innerText =`${elCurrLevel} best time:`
-            elCurrBest.innerText+=  localStorage.getItem(`${elCurrLevel}Best`)?localStorage.getItem(`${elCurrLevel}Best`):'--'
-        }
+            elCurrBest.innerText = `${elCurrLevel} best time:`
+            elCurrBest.innerText += localStorage.getItem(`${elCurrLevel}Best`) ? localStorage.getItem(`${elCurrLevel}Best`) : '--'
+    }
 }
 

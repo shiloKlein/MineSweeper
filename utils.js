@@ -38,7 +38,6 @@ function updateTimer() {
     var infSeconds = +(diff / 1000).toFixed(0)
     seconds = infSeconds < 60 ? infSeconds : infSeconds % 60
     if (infSeconds >= 60 && infSeconds % 60 === 0) minutes++
-    console.log(minutes);
 
 
 
